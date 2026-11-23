@@ -22,7 +22,7 @@ spec:
       targetRevision: main
       path: manifests
       directory:
-        include: '{managed-cert.yaml,frontend-config.yaml}'
+        include: '{managed-cert.yaml,frontend-config.yaml,backend-config.yaml}'
   destination:
     server: https://kubernetes.default.svc
     namespace: rhdh
