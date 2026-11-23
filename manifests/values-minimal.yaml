@@ -17,7 +17,7 @@ ingress:
     networking.gke.io/v1beta1.FrontendConfig: rhdh-frontend-config
 
 imagePullSecrets:
-  - rhdh-pull-secret
+  - name: rhdh-pull-secret
 
 podSecurityContext:
   fsGroup: 2000
