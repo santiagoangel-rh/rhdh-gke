@@ -4,6 +4,5 @@ metadata:
   name: rhdh-frontend-config
   namespace: rhdh
 spec:
-  sslPolicy: gke-ingress-ssl-policy-https
   redirectToHttps:
     enabled: true
