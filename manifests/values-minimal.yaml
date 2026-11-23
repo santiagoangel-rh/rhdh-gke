@@ -6,6 +6,8 @@ openshift:
 
 service:
   type: NodePort
+  annotations:
+    cloud.google.com/backend-config: '{"default": "rhdh-backend-config"}'
 
 ingress:
   enabled: true
