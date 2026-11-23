@@ -41,8 +41,10 @@ resources:
     cpu: "2000m"
     memory: "4Gi"
 
-# Bundled PostgreSQL with GKE fsGroup & minimal sizing
+# Bundled PostgreSQL with pinned password, GKE fsGroup & minimal sizing
 postgresql:
+  auth:
+    password: "mPfv9uFbkq"
   image:
     pullSecrets:
       - rhdh-pull-secret
