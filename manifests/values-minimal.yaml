@@ -1,43 +1,53 @@
-global:
-  host: rhdh.rz5kh.gcp.redhatworkshops.io
-  imagePullSecrets:
-    - rhdh-pull-secret
+host: rhdh.rz5kh.gcp.redhatworkshops.io
 
-# Disable OpenShift Route on GKE
-route:
-  enabled: false
+openshift:
+  route:
+    enabled: false
 
-upstream:
-  backstage:
-    replicas: 1
+service:
+  type: NodePort
+
+ingress:
+  enabled: true
+  className: gce
+  annotations:
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: rhdh-static-ip
+    networking.gke.io/managed-certificates: rhdh-managed-cert
+    networking.gke.io/v1beta1.FrontendConfig: rhdh-frontend-config
+
+imagePullSecrets:
+  - rhdh-pull-secret
+
+podSecurityContext:
+  fsGroup: 2000
+
+# Minimal sizing for RHDH container
+resources:
+  requests:
+    cpu: "1000m"
+    memory: "2Gi"
+  limits:
+    cpu: "2000m"
+    memory: "4Gi"
+
+# Bundled PostgreSQL with GKE volume permissions & minimal sizing
+postgresql:
+  image:
+    pullSecrets:
+      - rhdh-pull-secret
+  primary:
+    podSecurityContext:
+      enabled: true
+      fsGroup: 3000
+    persistence:
+      size: 10Gi
     resources:
       requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
         cpu: "1000m"
         memory: "2Gi"
-      limits:
-        cpu: "2000m"
-        memory: "4Gi"
-  service:
-    type: NodePort
-  ingress:
+  volumePermissions:
     enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "gce"
-      kubernetes.io/ingress.global-static-ip-name: "rhdh-static-ip"
-      networking.gke.io/managed-certificates: "rhdh-managed-cert"
-      networking.gke.io/v1beta1.FrontendConfig: "rhdh-frontend-config"
-
-  # Bundled PostgreSQL minimal sizing
-  postgresql:
-    enabled: true
-    primary:
-      persistence:
-        enabled: true
-        size: 10Gi
-      resources:
-        requests:
-          cpu: "500m"
-          memory: "1Gi"
-        limits:
-          cpu: "1000m"
-          memory: "2Gi"
