@@ -31,7 +31,7 @@ resources:
     cpu: "2000m"
     memory: "4Gi"
 
-# Bundled PostgreSQL with GKE volume permissions & minimal sizing
+# Bundled PostgreSQL with GKE fsGroup & minimal sizing
 postgresql:
   image:
     pullSecrets:
@@ -50,4 +50,4 @@ postgresql:
         cpu: "1000m"
         memory: "2Gi"
   volumePermissions:
-    enabled: true
+    enabled: false
