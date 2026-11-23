@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: rhdh-managed-cert
+  namespace: rhdh
+spec:
+  domains:
+    - rhdh.rz5kh.gcp.redhatworkshops.io

@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redhat-developer-hub
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    # Source 1: Official OpenShift Helm Chart for RHDH 2.1
+    - repoURL: https://charts.openshift.io/
+      chart: redhat-developer-hub
+      targetRevision: 2.1.0
+      helm:
+        releaseName: rhdh
+        valueFiles:
+          - $values/manifests/values-minimal.yaml
+    # Source 2: Your GitHub Repo (values + GKE manifests)
+    - repoURL: https://github.com/santiagoangel-rh/rhdh-gke.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/santiagoangel-rh/rhdh-gke.git
+      targetRevision: main
+      path: manifests
+      directory:
+        include: '{managed-cert.yaml,frontend-config.yaml}'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rhdh
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
